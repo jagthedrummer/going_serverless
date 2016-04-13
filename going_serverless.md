@@ -58,6 +58,26 @@ specialist.
 
 ---
 
+# Scale
+
+![](scaling.jpg)
+
+---
+
+# Money
+
+![](money.jpg)
+
+^ Especially when compared to the cost of operations engineers,
+deploying code to AWS can be very inexpensive.
+
+---
+
+# The Pieces
+
+![](pieces.jpg)
+
+---
 
 # Lambda
 
@@ -108,11 +128,78 @@ jeremy@octolabs.com
 
 ---
 
-## Lambda
+IndependentConsultingManual.com
+
+Remarq.io
+
+CloudHdr.com
+
+Things I Enjoy : Dopamine, Serotonin
+
+Other Interests : Drumming, Photography, and Brewing
+
+---
+
+# Lambda
 
 ![](lambda.png)
 
 ^ Heroku for single functions
+
+---
+
+# Supported Runtimes
+
+Node
+JAVA
+Python
+
+---
+
+# Anatomy of a Lambda Function
+
+![](anatomy2.jpg)
+
+---
+
+```javascript
+'use strict';
+exports.myHandler = (event, context, callback) => {
+    console.log('value1 =', event.key1);
+    console.log('value2 =', event.key2);
+    callback(null, event.key1);  // Echo back the first key value
+    // callback('Something went wrong');
+};
+```
+
+^ you must define `exports.myHandler`
+
+---
+
+# `event`
+
+used to pass data to the function
+
+---
+
+# `context`
+
+provides runtime information
+
+---
+
+# `callback`
+
+used to return data or an error
+
+```javascript
+// signature
+callback(error,data);
+// call with error
+callback("some error message");
+//or call with data
+callback(null, someData);
+```
 
 ---
 
@@ -228,21 +315,6 @@ $0.40 per month
 
 ---
 
-```javascript
-'use strict';
-console.log('Loading function');
-
-exports.handler = (event, context, callback) => {
-    //console.log('Received event:', JSON.stringify(event, null, 2));
-    console.log('value1 =', event.key1);
-    console.log('value2 =', event.key2);
-    console.log('value3 =', event.key3);
-    callback(null, event.key1);  // Echo back the first key value
-    // callback('Something went wrong');
-};
-```
-
----
 
 ## API Gateway
 
