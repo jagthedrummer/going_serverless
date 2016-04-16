@@ -322,12 +322,113 @@ $0.40 per month
 
 ---
 
+![fit](api-gateway-list.png)
+
+---
+
+![fit](api-gateway-create.png)
+
+---
+
+![fit](api-gateway-example.png)
+
+---
+
+![fit](api-gateway-petstore.png)
+
+---
+
+![fit](api-gateway-execution.png)
+
+---
+
+# Swagger
+
+swagger.io
+
+Used to describe and document RESTful APIs
+
+---
+
+
+```json
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "PetStore",
+    "description": "A simple Pet Store Demo"
+  },
+  "schemes": [ "https" ],
+  "paths": {
+    "/": {
+      "get": {...},
+      "post": {...},
+      "options": {...}
+    },
+    "/pets": {...},
+    "/pets/{petId}": {...}
+  }
+}
+```
+
+---
+
 ## CloudFormation
 
 ![](cloudformation.png)
 
 ---
 
-## DynamoDB
+![fit](cloud-formation.png)
 
-![](dynamodb.png)
+---
+
+![fit](cloud-formation-stack.png)
+
+---
+
+```json
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Simple Rails & local Mysql stack",
+  "Parameters": {
+    "KeyName": {
+      "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instances",
+      "Type": "AWS::EC2::KeyPair::KeyName",
+      "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
+    },
+    "DBName": { ... },
+    "DBUser": { ... },
+    "DBPassword": { ... },
+    "DBRootPassword": { ... },
+    "InstanceType": { ... },
+    "SSHLocation": { ... }
+  },
+  "Resources": {
+    "WebServer": { ... },
+    "WebServerSecurityGroup": { ... }
+  },
+  "Outputs": {
+    "WebsiteURL": { ... }
+  },
+  ...
+}
+```
+
+---
+
+# Serverless
+
+serverless.com
+
+Manage Lambda, API Gateway and CloudFormation
+via code instead of via GUI.
+
+![](serverless.png)
+
+---
+
+```bash
+npm install -g serverless
+```
+
