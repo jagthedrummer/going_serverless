@@ -432,3 +432,94 @@ via code instead of via GUI.
 npm install -g serverless
 ```
 
+---
+
+```bash
+$ sls project create
+ _______                             __
+|   _   .-----.----.--.--.-----.----|  .-----.-----.-----.
+|   |___|  -__|   _|  |  |  -__|   _|  |  -__|__ --|__ --|
+|____   |_____|__|  \___/|_____|__| |__|_____|_____|_____|
+|   |   |             The Serverless Application Framework
+|       |                           serverless.com, v0.5.5
+`-------'
+
+Serverless: Initializing Serverless Project...  
+Serverless: Enter a name for this project:  (serverless-bkqhpg) going-serverless-demo
+Serverless: Enter a new stage name for this project:  (dev) 
+Serverless: For the "dev" stage, do you want to use an existing Amazon Web Services
+            profile or create a new one?
+  > Existing Profile
+    Create A New Profile
+Serverless: Select a profile for your project: 
+  > lambdatest
+Serverless: Creating stage "dev"...  
+Serverless: Select a new region for your stage: 
+  > us-east-1
+    us-west-2
+    eu-west-1
+    eu-central-1
+    ap-northeast-1
+Serverless: Creating region "us-east-1" in stage "dev"...  
+Serverless: Deploying resources to stage "dev" in region "us-east-1" via Cloudformation
+            (~3 minutes)...  
+Serverless: /
+```
+
+---
+
+```bash
+Serverless: Successfully deployed "dev" resources to "us-east-1"  
+Serverless: Successfully created region "us-east-1" within stage "dev"  
+Serverless: Successfully created stage "dev"  
+Serverless: Successfully initialized project "going-serverless-demo"
+```
+
+---
+
+```bash
+$ cd going-serverless-demo
+$ tree
+.
+├── admin.env # AWS Profiles - gitignored
+├── package.json # npm package file
+├── s-project.json # project and author data
+├── s-resources-cf.json # CloudFormation template
+└── _meta # meta data for stage/regions config and variables - gitignored
+    ├── resources
+    │   └── s-resources-cf-dev-useast1.json
+    └── variables
+        ├── s-variables-common.json
+        ├── s-variables-dev-useast1.json
+        └── s-variables-dev.json
+
+3 directories, 8 files
+```
+
+---
+
+```
+$ sls function create
+Serverless: Enter a new function name to be created in the CWD:  hello-world
+Serverless: Please, select a runtime for this new Function
+  > nodejs4.3
+    python2.7
+    nodejs (v0.10, soon to be deprecated)
+Serverless: For this new Function, would you like to create an Endpoint, Event, or just the Function?
+  > Create Endpoint
+    Create Event
+    Just the Function...
+Serverless: Successfully created function: "hello-world"
+```
+
+---
+
+```bash
+$ tree hello-world/
+hello-world/
+├── event.json # sample event for testing function locally
+├── handler.js # function handler
+└── s-function.json # data for your lambda function, endpoints and event sources
+
+0 directories, 3 files
+```
