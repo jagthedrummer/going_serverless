@@ -754,6 +754,8 @@ module.exports.handler = function(event, context, cb) {
 
 ---
 
+# :ship: it!
+
 ```
 $ sls dash deploy
 ```
@@ -960,7 +962,7 @@ POST /comments
 
 ---
 
- .
+.
  
 # Thank you!
 
