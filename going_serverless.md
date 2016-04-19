@@ -956,9 +956,21 @@ POST /comments
 
 ---
 
+# Wrapping Up
+
+---
+
 ## AWS Provides the Building Blocks
 
+---
+
 ## Serverless Provides Structure and Process
+
+---
+
+## You provide the
+
+![inline](magic.gif)
 
 ---
 
