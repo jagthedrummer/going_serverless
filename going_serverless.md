@@ -1,3 +1,4 @@
+build-lists: true
 autoscale: true
 footer: *@jagthedrummer - OctoLabs.com*
 slidenumbers: false
@@ -6,6 +7,9 @@ slidenumbers: false
 
 ^ Deploying web apps without servers.
 
+---
+
+# :thought_balloon:
 
 ---
 
@@ -27,7 +31,7 @@ don't worry about the infrastructure running your code.
 
 ---
 
-## serverless.com
+# :zap: serverless.com :zap:
 
 framework for building
 web, mobile and IoT applications on
@@ -37,7 +41,11 @@ AWS Lambda, API Gateway, and related services
 
 ---
 
-## Vendor Lock-in
+# :thought_balloon:
+
+---
+
+## Vendor Lock-in :fearful:
 
 ^ Cons: obvious
 Why would you do this?
@@ -70,6 +78,57 @@ specialist.
 
 ^ Especially when compared to the cost of operations engineers,
 deploying code to AWS can be very inexpensive.
+
+---
+
+# The Plan
+
+* Understand the Pieces
+
+* Serverless
+
+
+<!--
+* Lambda
+  * Functions
+  * Pricing
+  * GUI
+* API Gateway
+  * GUI
+* CloudFront
+  * GUI
+* Serverless
+  * Install
+  * Project
+  * Function / Endpoint
+  * Deploy
+  * Architectures
+-->
+
+---
+
+# Jeremy Green
+
+Consultant, Author, SaaSer
+
+![inline 100%](octologo.png)
+
+@jagthedrummer
+jeremy@octolabs.com
+
+---
+
+IndependentConsultingManual.com
+
+Remarq.io
+
+CloudHdr.com
+
+Things I Enjoy:
+Dopamine, Serotonin
+
+Other Interests:
+Drumming, Photography, and Brewing
 
 ---
 
@@ -117,28 +176,12 @@ HTTP calls can be mapped to Lambda invocations.
 
 ---
 
-# Jeremy Green
+## Putting it all together
 
-Consultant, Author, SaaSer
-
-![inline 100%](octologo.png)
-
-@jagthedrummer
-jeremy@octolabs.com
+![inline](big-picture.jpg)
 
 ---
 
-IndependentConsultingManual.com
-
-Remarq.io
-
-CloudHdr.com
-
-Things I Enjoy : Dopamine, Serotonin
-
-Other Interests : Drumming, Photography, and Brewing
-
----
 
 # Lambda
 
@@ -156,6 +199,55 @@ Python
 
 ---
 
+
+![fit](lambda-list.png)
+
+---
+
+![fit](lambda-create.png)
+
+---
+
+![fit](lambda-hello.png)
+
+---
+
+![fit](lambda-hello-create.png)
+
+---
+
+![fit](lambda-hello-create2.png)
+
+---
+
+![fit](lambda-api-endpoint.png)
+
+---
+
+![fit](lambda-add-event-source.png)
+
+^ AWS IoT
+^ Alexa Skills Kit
+^ Alexa Smart Home
+^ CloudWatch Events - Schedule
+^ CloudWatch Logs
+^ Cognito Sync Trigger
+^ DynamoDB
+
+---
+
+![fit](lambda-test.png)
+
+---
+
+![fit](lambda-monitoring.png)
+
+---
+
+![fit](lambda-monitoring2.png)
+
+---
+
 # Anatomy of a Lambda Function
 
 ![](anatomy2.jpg)
@@ -164,7 +256,7 @@ Python
 
 ```javascript
 'use strict';
-exports.myHandler = (event, context, callback) => {
+module.exports.handler = (event, context, callback) => {
     console.log('value1 =', event.key1);
     console.log('value2 =', event.key2);
     callback(null, event.key1);  // Echo back the first key value
@@ -172,7 +264,12 @@ exports.myHandler = (event, context, callback) => {
 };
 ```
 
-^ you must define `exports.myHandler`
+^ Your handler can be named whatever you want.
+You configure it during Lambda setup.
+
+^ Referenced by filename dot function name.
+
+^ Maybe index.handler
 
 ---
 
@@ -180,11 +277,31 @@ exports.myHandler = (event, context, callback) => {
 
 used to pass data to the function
 
+```json
+{
+  key1: 'value1',
+  key2: 'value2',
+  key3: 'value3'
+}
+```
+
 ---
 
 # `context`
 
 provides runtime information
+
+```javascript
+{
+  getRemainingTimeInMillis: function(){},
+  functionName:             'handler',
+  functionVersion:          'xyz',
+  awsRequestId:             '12345',
+  logGroupName:             'abcde',
+  identity:                 {...},
+  clientContext:            {...}
+}
+```
 
 ---
 
@@ -203,14 +320,57 @@ callback(null, someData);
 
 ---
 
+# Lambda Lifecycle
 
-## Lambda Pricing
+# :arrows_counterclockwise:
+
+1. You upload your code
+
+2. Amazon doesn't do anything
+
+---
+
+# Lambda Cold Start :snowflake:
+
+1. AWS Receives Execution Request
+
+2. Container is provisioned
+
+3. Container is loaded with your code
+
+4. Your code begins exeuction
+
+5. Your code returns a result
+
+---
+
+# Time Passes
+
+# :clock1:
+
+## (But not too much)
+
+---
+
+# Lambda Container Reuse :recycle:
+
+1. AWS Receives Execution Request
+
+2. Your code begins exeuction
+
+3. Your code returns a result
+
+
+---
+
+
+## Lambda Pricing :moneybag:
 
 Charged by:
 
-\# of requests
+* \# of requests
 
-length of execution
+* length of execution
 
 ---
 
@@ -227,6 +387,20 @@ $0.20 per 1 million requests thereafter<br/>($0.0000002 per request)
 First 400,000 GB-seconds per month are free
 
 $0.00001667 for per GB-second thereafter
+
+---
+
+GB-second 
+
+ =
+
+LambdaMemoryInGigabytes * ExecutionTime
+
+<hr/>
+
+1GB * 1sec = 1 GB-sec
+0.5GB * 2sec = 1 GB-sec
+0.1GB * 0.5sec * 20executions = 1 GB-sec
 
 ---
 
@@ -267,55 +441,6 @@ $0.40 per month
 ---
 
 
-![fit](lambda-list.png)
-
----
-
-![fit](lambda-create.png)
-
----
-
-![fit](lambda-hello.png)
-
----
-
-![fit](lambda-hello-create.png)
-
----
-
-![fit](lambda-hello-create2.png)
-
----
-
-![fit](lambda-add-event-source.png)
-
-^ AWS IoT
-^ Alexa Skills Kit
-^ Alexa Smart Home
-^ CloudWatch Events - Schedule
-^ CloudWatch Logs
-^ Cognito Sync Trigger
-^ DynamoDB
-
----
-
-![fit](lambda-api-endpoint.png)
-
----
-
-![fit](lambda-test.png)
-
----
-
-![fit](lambda-monitoring.png)
-
----
-
-![fit](lambda-monitoring2.png)
-
----
-
-
 ## API Gateway
 
 ![](api-gateway.png)
@@ -342,6 +467,7 @@ $0.40 per month
 
 ---
 
+<!-- 
 # Swagger
 
 swagger.io
@@ -372,6 +498,8 @@ Used to describe and document RESTful APIs
 ```
 
 ---
+
+-->
 
 ## CloudFormation
 
@@ -428,14 +556,33 @@ via code instead of via GUI.
 
 ---
 
+## First step
+
+* # Create a new AWS account!
+
+* ## Srsly!
+
+^ Serverless getting started instructions start with
+very permissive permissions.
+
+^ For production deployement in a 'live' account you 
+should take time to understand the permission model.
+
+---
+
 ```bash
-npm install -g serverless
+$ npm install -g serverless
 ```
 
 ---
 
 ```bash
 $ sls project create
+```
+
+---
+
+```bash
  _______                             __
 |   _   .-----.----.--.--.-----.----|  .-----.-----.-----.
 |   |___|  -__|   _|  |  |  -__|   _|  |  -__|__ --|__ --|
@@ -443,7 +590,11 @@ $ sls project create
 |   |   |             The Serverless Application Framework
 |       |                           serverless.com, v0.5.5
 `-------'
+```
 
+---
+
+```bash
 Serverless: Initializing Serverless Project...  
 Serverless: Enter a name for this project:  (serverless-bkqhpg) going-serverless-demo
 Serverless: Enter a new stage name for this project:  (dev) 
@@ -496,6 +647,8 @@ $ tree
 3 directories, 8 files
 ```
 
+^ At this point the project is totally useless
+
 ---
 
 ```
@@ -523,3 +676,294 @@ hello-world/
 
 0 directories, 3 files
 ```
+
+---
+
+### `hello-world/handler.js`
+
+```javascript
+'use strict';
+
+module.exports.handler = function(event, context, cb) {
+  return cb(null, {
+    message: 'Go Serverless! Your Lambda function executed successfully!'
+  });
+};
+```
+
+---
+
+### `hello-world/s-function.json`
+
+```json
+{
+  "name": "hello-world",
+  "runtime": "nodejs4.3",
+  "description": "Serverless Lambda function for project: going-serverless-demo",
+  "customName": false,
+  "customRole": false,
+  "handler": "handler.handler",
+  "timeout": 6,
+  "memorySize": 1024,
+  "authorizer": {},
+  "custom": {
+    "excludePatterns": []
+  },
+  "endpoints": [...],
+  "events": [],
+  "environment": {
+    "SERVERLESS_PROJECT": "${project}",
+    "SERVERLESS_STAGE": "${stage}",
+    "SERVERLESS_REGION": "${region}"
+  },
+  "vpc": {
+    "securityGroupIds": [],
+    "subnetIds": []
+  }
+}
+```
+
+---
+### `hello-world/s-function.json`
+
+```json
+{
+  "endpoints": [
+    {
+      "path": "hello-world",
+      "method": "GET",
+      "type": "AWS",
+      "authorizationType": "none",
+      "authorizerFunction": false,
+      "apiKeyRequired": false,
+      "requestParameters": {},
+      "requestTemplates": { ... },
+      "responses": {
+        "400": { "statusCode": "400" },
+        "default": {
+          "statusCode": "200",
+          "responseParameters": {},
+          "responseModels": { ... },
+          "responseTemplates": { ... }
+        }
+      }
+    }
+  ]
+}
+```
+
+---
+
+```
+$ sls dash deploy
+```
+
+---
+
+```
+ _______                             __
+|   _   .-----.----.--.--.-----.----|  .-----.-----.-----.
+|   |___|  -__|   _|  |  |  -__|   _|  |  -__|__ --|__ --|
+|____   |_____|__|  \___/|_____|__| |__|_____|_____|_____|
+|   |   |             The Serverless Application Framework
+|       |                           serverless.com, v0.5.5
+`-------'
+
+Use the <up>, <down>, <pageup>, <pagedown>, <home>, and <end> keys to navigate.
+Press <enter> to select/deselect, or <space> to select/deselect and move down.
+Press <ctrl> + a to select all, and <ctrl> + d to deselect all.
+Press <ctrl> + f to select all functions, and <ctrl> + e to select all endpoints.
+Press <ctrl> + <enter> to immediately deploy selected.
+Press <escape> to cancel.
+
+
+Serverless: Select the assets you wish to deploy:
+    hello-world
+    *  function - hello-world
+    *  endpoint - hello-world - GET
+    - - - - -
+  > Deploy
+    Cancel
+```
+
+---
+
+```
+Serverless: Deploying the specified functions in "dev" to the following regions: us-east-1  
+Serverless: ------------------------  
+Serverless: Successfully deployed the following functions in "dev" to the following regions:   
+Serverless: us-east-1 ------------------------  
+Serverless:   hello-world (going-serverless-demo-hello-world):
+  arn:aws:lambda:us-east-1:852612687751:function:going-serverless-demo-hello-world:dev  
+
+Serverless: Deploying endpoints in "dev" to the following regions: us-east-1  
+Serverless: Successfully deployed endpoints in "dev" to the following regions:  
+Serverless: us-east-1 ------------------------  
+Serverless:   GET - hello-world -
+  https://yvgrg7f444.execute-api.us-east-1.amazonaws.com/dev/hello-world 
+```
+
+---
+
+![fit](hello-world.png)
+
+---
+
+# Possible Architectures
+
+* Monolithic
+* Microservices
+* Nanoservices
+
+---
+
+## Monolithic Architecture
+
+* A single Lambda function
+handles multiple concerns
+
+* Multiple API Gateway
+enpoints map to one Lambda
+
+* Cold start will be slow
+
+* Any interaction with the
+system keeps Lambda alive
+
+
+---
+
+# Monolithic Lambda
+
+```
+MyGiantLambda
+  ├── Users.[index|show|create|update|delete]
+  ├── Posts.[index|show|create|update|delete]
+  └── Comments.[index|show|create|update|delete]
+```
+
+---
+
+# Monolithic API Gateway
+
+```
+/users[/*]
+  └── MyGiantLambda.Users.[index|show|create|update|delete]
+
+/posts[/*]
+  └── MyGiantLambda.Posts.[index|show|create|update|delete]
+
+/comments[/*]
+  └── MyGiantLambda.Comments.[index|show|create|update|delete]
+```
+
+---
+
+# Microservices Architecture
+
+* A single Lambda function for each concern/resource
+
+* Multiple API Gateway enpoints map
+to multiple Lambdas
+
+* Cold start not as slow
+
+* Any interaction with a concern
+keeps that concern alive
+
+---
+
+# Microservices Lambda
+
+```
+UserLambda
+  └── Users
+
+PostLambda
+  └── Posts
+
+CommentLambda
+  └── Comments
+```
+
+---
+
+# Microservices API Gateway
+
+```
+/users[/*]
+  └── UserLambda.[index|show|create|update|delete]
+
+/posts[/*]
+  └── PostLambda.[index|show|create|update|delete]
+
+/comments[/*]
+  └── CommentLambda.[index|show|create|update|delete]
+```
+
+---
+
+# Nanoservices Architecture
+
+* A single Lambda function
+for each logical function
+
+* One-to-one mapping between
+API Gateway & Lambda
+
+* Fastest cold start
+
+* Each function has a seperate lifecycle
+
+
+---
+
+# Nanoservices Lambda
+
+```
+UserCreateLambda
+  └── handler
+
+UserUpdateLambda
+  └── handler
+
+PostCreateLambda
+  └── handler
+
+CommentCreateLambda
+  └── handler
+```
+
+---
+
+# Nanoservices API Gateway
+
+```
+POST /users
+  └── UserCreateLambda.handler
+
+PUT /users/:user_id
+  └── UserUpdateLambda.handler
+
+POST /posts
+  └── PostCreateLambda.handler
+
+POST /comments
+  └── CommentCreateLambda.handler
+```
+
+---
+
+## AWS Provides the Building Blocks
+
+## Serverless Provides Structure and Process
+
+---
+
+ .
+ 
+# Thank you!
+
+octolabs.com/serverless-okcjs
+
+![original](we-did-it.jpg)
