@@ -31,10 +31,14 @@ don't worry about the infrastructure running your code.
 
 ---
 
+![](sls-fire.gif)
+
+---
+
 # :zap: serverless.com :zap:
 
 framework for building
-web, mobile and IoT applications on
+web, mobile and IoT applications **exclusively** on
 AWS Lambda, API Gateway, and related services
 
 ![](serverless.png)
@@ -132,6 +136,18 @@ Drumming, Photography, and Brewing
 
 ---
 
+![fit](clickfunnels_logo.png)
+
+^ Thanks to click funnels for supporting this talk and
+allowing me to talk about what we've been doing.
+
+---
+
+![](cf-system.png)
+
+
+---
+
 # The Pieces
 
 ![](pieces.jpg)
@@ -179,6 +195,123 @@ HTTP calls can be mapped to Lambda invocations.
 ## Putting it all together
 
 ![inline](big-picture.jpg)
+
+
+---
+
+# Serverless
+
+serverless.com
+
+Manage Lambda, API Gateway and CloudFormation
+via code and CLI instead of via GUI.
+
+docs.serverless.com
+
+![](serverless.png)
+
+---
+
+# Getting started
+
+---
+
+## First step
+
+* # Create a new AWS account!
+
+* ## Srsly!
+
+^ Serverless getting started instructions start with
+very permissive permissions.
+
+^ For production deployement in a 'live' account you 
+should take time to understand the permission model.
+
+---
+
+```bash
+$ npm install -g serverless
+```
+
+---
+
+```bash
+$ sls project create
+```
+
+---
+
+```bash
+ _______                             __
+|   _   .-----.----.--.--.-----.----|  .-----.-----.-----.
+|   |___|  -__|   _|  |  |  -__|   _|  |  -__|__ --|__ --|
+|____   |_____|__|  \___/|_____|__| |__|_____|_____|_____|
+|   |   |             The Serverless Application Framework
+|       |                           serverless.com, v0.5.5
+`-------'
+```
+
+---
+
+```bash
+Serverless: Initializing Serverless Project...  
+Serverless: Enter a name for this project:  (serverless-bkqhpg) going-serverless-demo
+Serverless: Enter a new stage name for this project:  (dev) 
+Serverless: For the "dev" stage, do you want to use an existing Amazon Web Services
+            profile or create a new one?
+  > Existing Profile
+    Create A New Profile
+Serverless: Select a profile for your project: 
+  > lambdatest
+Serverless: Creating stage "dev"...  
+Serverless: Select a new region for your stage: 
+  > us-east-1
+    us-west-2
+    eu-west-1
+    eu-central-1
+    ap-northeast-1
+Serverless: Creating region "us-east-1" in stage "dev"...  
+Serverless: Deploying resources to stage "dev" in region "us-east-1" via Cloudformation
+            (~3 minutes)...  
+Serverless: /
+```
+
+---
+
+```bash
+Serverless: Successfully deployed "dev" resources to "us-east-1"  
+Serverless: Successfully created region "us-east-1" within stage "dev"  
+Serverless: Successfully created stage "dev"  
+Serverless: Successfully initialized project "going-serverless-demo"
+```
+
+---
+
+```bash
+$ cd going-serverless-demo
+$ tree
+.
+├── admin.env # AWS Profiles - gitignored
+├── package.json # npm package file
+├── s-project.json # project and author data
+├── s-resources-cf.json # CloudFormation template
+└── _meta # meta data for stage/regions config and variables - gitignored
+    ├── resources
+    │   └── s-resources-cf-dev-useast1.json
+    └── variables
+        ├── s-variables-common.json
+        ├── s-variables-dev-useast1.json
+        └── s-variables-dev.json
+
+3 directories, 8 files
+```
+
+^ At this point the project is totally useless
+
+
+
+
 
 ---
 
@@ -338,7 +471,7 @@ callback(null, someData);
 
 3. Container is loaded with your code
 
-4. Your code begins exeuction
+4. Your code begins execution
 
 5. Your code returns a result
 
@@ -356,7 +489,7 @@ callback(null, someData);
 
 1. AWS Receives Execution Request
 
-2. Your code begins exeuction
+2. Your code begins execution
 
 3. Your code returns a result
 
@@ -382,7 +515,7 @@ $0.20 per 1 million requests thereafter<br/>($0.0000002 per request)
 
 ---
 
-## Lambda Excecution Pricing
+## Lambda Execution Pricing
 
 First 400,000 GB-seconds per month are free
 
@@ -542,112 +675,6 @@ Used to describe and document RESTful APIs
   ...
 }
 ```
-
----
-
-# Serverless
-
-serverless.com
-
-Manage Lambda, API Gateway and CloudFormation
-via code instead of via GUI.
-
-![](serverless.png)
-
----
-
-## First step
-
-* # Create a new AWS account!
-
-* ## Srsly!
-
-^ Serverless getting started instructions start with
-very permissive permissions.
-
-^ For production deployement in a 'live' account you 
-should take time to understand the permission model.
-
----
-
-```bash
-$ npm install -g serverless
-```
-
----
-
-```bash
-$ sls project create
-```
-
----
-
-```bash
- _______                             __
-|   _   .-----.----.--.--.-----.----|  .-----.-----.-----.
-|   |___|  -__|   _|  |  |  -__|   _|  |  -__|__ --|__ --|
-|____   |_____|__|  \___/|_____|__| |__|_____|_____|_____|
-|   |   |             The Serverless Application Framework
-|       |                           serverless.com, v0.5.5
-`-------'
-```
-
----
-
-```bash
-Serverless: Initializing Serverless Project...  
-Serverless: Enter a name for this project:  (serverless-bkqhpg) going-serverless-demo
-Serverless: Enter a new stage name for this project:  (dev) 
-Serverless: For the "dev" stage, do you want to use an existing Amazon Web Services
-            profile or create a new one?
-  > Existing Profile
-    Create A New Profile
-Serverless: Select a profile for your project: 
-  > lambdatest
-Serverless: Creating stage "dev"...  
-Serverless: Select a new region for your stage: 
-  > us-east-1
-    us-west-2
-    eu-west-1
-    eu-central-1
-    ap-northeast-1
-Serverless: Creating region "us-east-1" in stage "dev"...  
-Serverless: Deploying resources to stage "dev" in region "us-east-1" via Cloudformation
-            (~3 minutes)...  
-Serverless: /
-```
-
----
-
-```bash
-Serverless: Successfully deployed "dev" resources to "us-east-1"  
-Serverless: Successfully created region "us-east-1" within stage "dev"  
-Serverless: Successfully created stage "dev"  
-Serverless: Successfully initialized project "going-serverless-demo"
-```
-
----
-
-```bash
-$ cd going-serverless-demo
-$ tree
-.
-├── admin.env # AWS Profiles - gitignored
-├── package.json # npm package file
-├── s-project.json # project and author data
-├── s-resources-cf.json # CloudFormation template
-└── _meta # meta data for stage/regions config and variables - gitignored
-    ├── resources
-    │   └── s-resources-cf-dev-useast1.json
-    └── variables
-        ├── s-variables-common.json
-        ├── s-variables-dev-useast1.json
-        └── s-variables-dev.json
-
-3 directories, 8 files
-```
-
-^ At this point the project is totally useless
 
 ---
 
@@ -821,11 +848,11 @@ Serverless:   GET - hello-world -
 
 ## Monolithic Architecture
 
-* A single Lambda function
+* A single Lambda
 handles multiple concerns
 
 * Multiple API Gateway
-enpoints map to one Lambda
+endpoints map to one Lambda
 
 * Cold start will be slow
 
@@ -915,7 +942,7 @@ API Gateway & Lambda
 
 * Fastest cold start
 
-* Each function has a seperate lifecycle
+* Each function has a separate lifecycle
 
 
 ---
@@ -978,6 +1005,6 @@ POST /comments
  
 # Thank you!
 
-octolabs.com/serverless-okcjs
+octolabs.com/goingserverless-okcjs
 
 ![original](we-did-it.jpg)
