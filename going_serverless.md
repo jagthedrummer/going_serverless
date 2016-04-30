@@ -85,12 +85,13 @@ deploying code to AWS can be very inexpensive.
 
 ---
 
+<!--
 # The Plan
 
 * Understand the Pieces
 
 * Serverless
-
+-->
 
 <!--
 * Lambda
@@ -109,7 +110,6 @@ deploying code to AWS can be very inexpensive.
   * Architectures
 -->
 
----
 
 # Jeremy Green
 
@@ -159,7 +159,7 @@ allowing me to talk about what we've been doing.
 ![](lambda.png)
 
 ^ Heroku for single functions
-Raw compute power .
+Raw compute power.
 
 ---
 
@@ -326,9 +326,13 @@ $ tree
 
 # Supported Runtimes
 
-Node
-JAVA
-Python
+##Node
+##JAVA
+##Python\*
+
+\*Python not suppored by Serverless**
+
+**Yet
 
 ---
 
@@ -339,9 +343,9 @@ Python
 
 ![fit](lambda-create.png)
 
----
-
+<!--
 ![fit](lambda-hello.png)
+-->
 
 ---
 
@@ -369,15 +373,65 @@ Python
 
 ---
 
+<!--
+
 ![fit](lambda-test.png)
 
----
+- - -
 
 ![fit](lambda-monitoring.png)
 
----
+- - -
 
 ![fit](lambda-monitoring2.png)
+
+- - -
+
+-->
+
+
+
+## Coding in the browser?
+
+## :unamused: => :fearful: => :rage:
+
+---
+
+# Serverless to the rescue
+
+```
+$ sls function create
+```
+
+---
+
+```
+$ sls function create
+Serverless: Enter a new function name to be created in the CWD:  hello-world
+Serverless: Please, select a runtime for this new Function
+  > nodejs4.3
+    python2.7
+    nodejs (v0.10, soon to be deprecated)
+Serverless: For this new Function, would you like to create an Endpoint, Event, or just the Function?
+  > Create Endpoint
+    Create Event
+    Just the Function...
+Serverless: Successfully created function: "hello-world"
+```
+
+---
+
+```bash
+$ tree hello-world/
+hello-world/
+├── event.json # sample event for testing function locally
+├── handler.js # function handler
+└── s-function.json # data for your lambda function, endpoints and event sources
+
+0 directories, 3 files
+```
+
+
 
 ---
 
@@ -453,6 +507,148 @@ callback(null, someData);
 
 ---
 
+### `hello-world/handler.js`
+
+```javascript
+'use strict';
+
+module.exports.handler = function(event, context, cb) {
+  return cb(null, {
+    message: 'Go Serverless! Your Lambda function executed successfully!'
+  });
+};
+```
+
+---
+
+### `hello-world/s-function.json`
+
+```javascript
+{
+  "name": "hello-world",
+  "runtime": "nodejs4.3",
+  "description": "Serverless Lambda function for project: going-serverless-demo",
+  "customName": false,
+  "customRole": false,
+  "handler": "handler.handler",
+  "timeout": 6,
+  "memorySize": 1024,
+  "authorizer": {},
+  "custom": {
+    "excludePatterns": []
+  },
+  "endpoints": [...],
+  "events": [],
+  "environment": {
+    "SERVERLESS_PROJECT": "${project}",
+    "SERVERLESS_STAGE": "${stage}",
+    "SERVERLESS_REGION": "${region}"
+  },
+  "vpc": {
+    "securityGroupIds": [],
+    "subnetIds": []
+  }
+}
+```
+
+---
+### `hello-world/s-function.json`
+
+```javascript
+{
+  "endpoints": [
+    {
+      "path": "hello-world",
+      "method": "GET",
+      "type": "AWS",
+      "authorizationType": "none",
+      "authorizerFunction": false,
+      "apiKeyRequired": false,
+      "requestParameters": {},
+      "requestTemplates": { ... },
+      "responses": {
+        "400": { "statusCode": "400" },
+        "default": {
+          "statusCode": "200",
+          "responseParameters": {},
+          "responseModels": { ... },
+          "responseTemplates": { ... }
+        }
+      }
+    }
+  ]
+}
+```
+
+---
+
+# :ship: it!
+
+---
+
+```
+$ sls dash deploy
+```
+
+---
+
+```
+ _______                             __
+|   _   .-----.----.--.--.-----.----|  .-----.-----.-----.
+|   |___|  -__|   _|  |  |  -__|   _|  |  -__|__ --|__ --|
+|____   |_____|__|  \___/|_____|__| |__|_____|_____|_____|
+|   |   |             The Serverless Application Framework
+|       |                           serverless.com, v0.5.5
+`-------'
+
+Use the <up>, <down>, <pageup>, <pagedown>, <home>, and <end> keys to navigate.
+Press <enter> to select/deselect, or <space> to select/deselect and move down.
+Press <ctrl> + a to select all, and <ctrl> + d to deselect all.
+Press <ctrl> + f to select all functions, and <ctrl> + e to select all endpoints.
+Press <ctrl> + <enter> to immediately deploy selected.
+Press <escape> to cancel.
+
+
+Serverless: Select the assets you wish to deploy:
+    hello-world
+    *  function - hello-world
+    *  endpoint - hello-world - GET
+    - - - - -
+  > Deploy
+    Cancel
+```
+
+---
+
+```
+Serverless: Deploying the specified functions in "dev" to the following regions: us-east-1  
+Serverless: ------------------------  
+Serverless: Successfully deployed the following functions in "dev" to the following regions:   
+Serverless: us-east-1 ------------------------  
+Serverless:   hello-world (going-serverless-demo-hello-world):
+  arn:aws:lambda:us-east-1:852612687751:function:going-serverless-demo-hello-world:dev  
+
+Serverless: Deploying endpoints in "dev" to the following regions: us-east-1  
+Serverless: Successfully deployed endpoints in "dev" to the following regions:  
+Serverless: us-east-1 ------------------------  
+Serverless:   GET - hello-world -
+  https://yvgrg7f444.execute-api.us-east-1.amazonaws.com/dev/hello-world 
+```
+
+---
+
+![fit](hello-world.png)
+
+---
+
+# Possible Architectures
+
+* Monolithic
+* Microservices
+* Nanoservices
+
+---
+
 # Lambda Lifecycle
 
 # :arrows_counterclockwise:
@@ -496,6 +692,7 @@ callback(null, someData);
 
 ---
 
+<!--
 
 ## Lambda Pricing :moneybag:
 
@@ -573,7 +770,10 @@ $0.40 per month
 
 ---
 
+-->
 
+
+<!--
 ## API Gateway
 
 ![](api-gateway.png)
@@ -599,6 +799,7 @@ $0.40 per month
 ![fit](api-gateway-execution.png)
 
 ---
+-->
 
 <!-- 
 # Swagger
@@ -633,6 +834,8 @@ Used to describe and document RESTful APIs
 ---
 
 -->
+
+<!--
 
 ## CloudFormation
 
@@ -678,173 +881,10 @@ Used to describe and document RESTful APIs
 
 ---
 
-```
-$ sls function create
-Serverless: Enter a new function name to be created in the CWD:  hello-world
-Serverless: Please, select a runtime for this new Function
-  > nodejs4.3
-    python2.7
-    nodejs (v0.10, soon to be deprecated)
-Serverless: For this new Function, would you like to create an Endpoint, Event, or just the Function?
-  > Create Endpoint
-    Create Event
-    Just the Function...
-Serverless: Successfully created function: "hello-world"
-```
-
----
-
-```bash
-$ tree hello-world/
-hello-world/
-├── event.json # sample event for testing function locally
-├── handler.js # function handler
-└── s-function.json # data for your lambda function, endpoints and event sources
-
-0 directories, 3 files
-```
-
----
-
-### `hello-world/handler.js`
-
-```javascript
-'use strict';
-
-module.exports.handler = function(event, context, cb) {
-  return cb(null, {
-    message: 'Go Serverless! Your Lambda function executed successfully!'
-  });
-};
-```
-
----
-
-### `hello-world/s-function.json`
-
-```json
-{
-  "name": "hello-world",
-  "runtime": "nodejs4.3",
-  "description": "Serverless Lambda function for project: going-serverless-demo",
-  "customName": false,
-  "customRole": false,
-  "handler": "handler.handler",
-  "timeout": 6,
-  "memorySize": 1024,
-  "authorizer": {},
-  "custom": {
-    "excludePatterns": []
-  },
-  "endpoints": [...],
-  "events": [],
-  "environment": {
-    "SERVERLESS_PROJECT": "${project}",
-    "SERVERLESS_STAGE": "${stage}",
-    "SERVERLESS_REGION": "${region}"
-  },
-  "vpc": {
-    "securityGroupIds": [],
-    "subnetIds": []
-  }
-}
-```
-
----
-### `hello-world/s-function.json`
-
-```json
-{
-  "endpoints": [
-    {
-      "path": "hello-world",
-      "method": "GET",
-      "type": "AWS",
-      "authorizationType": "none",
-      "authorizerFunction": false,
-      "apiKeyRequired": false,
-      "requestParameters": {},
-      "requestTemplates": { ... },
-      "responses": {
-        "400": { "statusCode": "400" },
-        "default": {
-          "statusCode": "200",
-          "responseParameters": {},
-          "responseModels": { ... },
-          "responseTemplates": { ... }
-        }
-      }
-    }
-  ]
-}
-```
-
----
-
-# :ship: it!
-
-```
-$ sls dash deploy
-```
-
----
-
-```
- _______                             __
-|   _   .-----.----.--.--.-----.----|  .-----.-----.-----.
-|   |___|  -__|   _|  |  |  -__|   _|  |  -__|__ --|__ --|
-|____   |_____|__|  \___/|_____|__| |__|_____|_____|_____|
-|   |   |             The Serverless Application Framework
-|       |                           serverless.com, v0.5.5
-`-------'
-
-Use the <up>, <down>, <pageup>, <pagedown>, <home>, and <end> keys to navigate.
-Press <enter> to select/deselect, or <space> to select/deselect and move down.
-Press <ctrl> + a to select all, and <ctrl> + d to deselect all.
-Press <ctrl> + f to select all functions, and <ctrl> + e to select all endpoints.
-Press <ctrl> + <enter> to immediately deploy selected.
-Press <escape> to cancel.
+-->
 
 
-Serverless: Select the assets you wish to deploy:
-    hello-world
-    *  function - hello-world
-    *  endpoint - hello-world - GET
-    - - - - -
-  > Deploy
-    Cancel
-```
 
----
-
-```
-Serverless: Deploying the specified functions in "dev" to the following regions: us-east-1  
-Serverless: ------------------------  
-Serverless: Successfully deployed the following functions in "dev" to the following regions:   
-Serverless: us-east-1 ------------------------  
-Serverless:   hello-world (going-serverless-demo-hello-world):
-  arn:aws:lambda:us-east-1:852612687751:function:going-serverless-demo-hello-world:dev  
-
-Serverless: Deploying endpoints in "dev" to the following regions: us-east-1  
-Serverless: Successfully deployed endpoints in "dev" to the following regions:  
-Serverless: us-east-1 ------------------------  
-Serverless:   GET - hello-world -
-  https://yvgrg7f444.execute-api.us-east-1.amazonaws.com/dev/hello-world 
-```
-
----
-
-![fit](hello-world.png)
-
----
-
-# Possible Architectures
-
-* Monolithic
-* Microservices
-* Nanoservices
-
----
 
 ## Monolithic Architecture
 
@@ -856,9 +896,10 @@ endpoints map to one Lambda
 
 * Cold start will be slow
 
+<!--
 * Any interaction with the
 system keeps Lambda alive
-
+-->
 
 ---
 
@@ -866,9 +907,15 @@ system keeps Lambda alive
 
 ```
 MyGiantLambda
-  ├── Users.[index|show|create|update|delete]
-  ├── Posts.[index|show|create|update|delete]
-  └── Comments.[index|show|create|update|delete]
+  ├── Users
+  └── Posts
+```
+
+```
+module.exports.usersIndex  = function(...){...}
+module.exports.usersCreate = function(...){...}
+module.exports.postsIndex  = function(...){...}
+module.exports.postsCreate = function(...){...}
 ```
 
 ---
@@ -876,6 +923,17 @@ MyGiantLambda
 # Monolithic API Gateway
 
 ```
+GET /users
+  └── MyGiantLambda.usersIndex
+
+POST /users
+  └── MyGiantLambda.usersCreate
+
+POST /posts
+  └── MyGiantLambda.postsCreate
+```
+
+<!--
 /users[/*]
   └── MyGiantLambda.Users.[index|show|create|update|delete]
 
@@ -884,7 +942,7 @@ MyGiantLambda
 
 /comments[/*]
   └── MyGiantLambda.Comments.[index|show|create|update|delete]
-```
+-->
 
 ---
 
@@ -897,8 +955,10 @@ to multiple Lambdas
 
 * Cold start not as slow
 
+<!--
 * Any interaction with a concern
 keeps that concern alive
+-->
 
 ---
 
@@ -907,12 +967,13 @@ keeps that concern alive
 ```
 UserLambda
   └── Users
+module.exports.index  = function(...){...}
+module.exports.create = function(...){...}
 
 PostLambda
   └── Posts
-
-CommentLambda
-  └── Comments
+module.exports.index  = function(...){...}
+module.exports.create = function(...){...}
 ```
 
 ---
@@ -920,6 +981,16 @@ CommentLambda
 # Microservices API Gateway
 
 ```
+GET /users
+  └── UserLambda.index
+
+POST /users
+  └── UserLambda.create
+
+POST /posts
+  └── PostLambda.create
+```
+<!--
 /users[/*]
   └── UserLambda.[index|show|create|update|delete]
 
@@ -928,7 +999,7 @@ CommentLambda
 
 /comments[/*]
   └── CommentLambda.[index|show|create|update|delete]
-```
+-->
 
 ---
 
@@ -942,24 +1013,25 @@ API Gateway & Lambda
 
 * Fastest cold start
 
+<!--
 * Each function has a separate lifecycle
-
+-->
 
 ---
 
 # Nanoservices Lambda
 
 ```
+UserIndexLambda
+  └── handler
+
 UserCreateLambda
   └── handler
 
-UserUpdateLambda
+PostIndexLambda
   └── handler
 
 PostCreateLambda
-  └── handler
-
-CommentCreateLambda
   └── handler
 ```
 
@@ -968,17 +1040,14 @@ CommentCreateLambda
 # Nanoservices API Gateway
 
 ```
+GET /users
+  └── UserIndexLambda.handler
+
 POST /users
   └── UserCreateLambda.handler
 
-PUT /users/:user_id
-  └── UserUpdateLambda.handler
-
 POST /posts
   └── PostCreateLambda.handler
-
-POST /comments
-  └── CommentCreateLambda.handler
 ```
 
 ---
