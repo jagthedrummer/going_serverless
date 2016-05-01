@@ -254,7 +254,7 @@ $ sls project create
 
 ---
 
-```bash
+```
 Serverless: Initializing Serverless Project...  
 Serverless: Enter a name for this project:  (serverless-bkqhpg) going-serverless-demo
 Serverless: Enter a new stage name for this project:  (dev) 
@@ -279,7 +279,7 @@ Serverless: /
 
 ---
 
-```bash
+```
 Serverless: Successfully deployed "dev" resources to "us-east-1"  
 Serverless: Successfully created region "us-east-1" within stage "dev"  
 Serverless: Successfully created stage "dev"  
@@ -391,9 +391,11 @@ $ tree
 
 
 
-## Coding in the browser?
+# Coding in the browser?
 
-## :unamused: => :fearful: => :rage:
+---
+
+# :unamused: → :fearful: → :rage:
 
 ---
 
@@ -430,6 +432,58 @@ hello-world/
 
 0 directories, 3 files
 ```
+
+---
+
+# :ship: it!
+
+---
+
+```
+$ sls dash deploy
+```
+
+---
+
+```
+$ sls dash deploy
+ _______                             __
+|   _   .-----.----.--.--.-----.----|  .-----.-----.-----.
+|   |___|  -__|   _|  |  |  -__|   _|  |  -__|__ --|__ --|
+|____   |_____|__|  \___/|_____|__| |__|_____|_____|_____|
+|   |   |             The Serverless Application Framework
+|       |                           serverless.com, v0.5.5
+`-------'
+
+Serverless: Select the assets you wish to deploy:
+    hello-world
+    *  function - hello-world
+    *  endpoint - hello-world - GET
+    - - - - -
+  > Deploy
+    Cancel
+```
+
+---
+
+```
+Serverless: Deploying the specified functions in "dev" to the following regions: us-east-1  
+Serverless: ------------------------  
+Serverless: Successfully deployed the following functions in "dev" to the following regions:   
+Serverless: us-east-1 ------------------------  
+Serverless:   hello-world (going-serverless-demo-hello-world):
+  arn:aws:lambda:us-east-1:852612687751:function:going-serverless-demo-hello-world:dev  
+
+Serverless: Deploying endpoints in "dev" to the following regions: us-east-1  
+Serverless: Successfully deployed endpoints in "dev" to the following regions:  
+Serverless: us-east-1 ------------------------  
+Serverless:   GET - hello-world -
+  https://yvgrg7f444.execute-api.us-east-1.amazonaws.com/dev/hello-world 
+```
+
+---
+
+![fit](hello-world.png)
 
 
 
@@ -507,6 +561,92 @@ callback(null, someData);
 
 ---
 
+# Let's build something real
+
+---
+
+# LPaaS
+
+## left-pad as a service*
+
+\* OK, "real" :smiling_imp:
+
+---
+
+```
+$ sls function create left-pad
+...
+$ cd left-pad
+
+$ npm init
+...
+$ npm install left-pad --save
+```
+
+---
+
+# left-pad/handler.js
+
+```javascript
+'use strict';
+
+let leftpad = require('left-pad');
+
+module.exports.handler = function(event, context, cb) {
+  var string = event.string || "",
+      padding = event.padding || 0,
+      paddedString = leftpad(string,padding),
+      payload = { paddedString };
+  return cb(null, payload);
+};
+```
+
+---
+
+# left-pad/s-function.json (simplified)
+
+```javascript
+{
+  "runtime": "nodejs4.3",
+  "handler": "handler.handler",
+  "memorySize": 1024
+  "endpoints": [
+    {
+      "path": "left-pad",
+      "method": "GET",
+      "requestTemplates": {
+        "application/json": {
+          "string":  "$input.params('string')",
+          "padding": "$input.params('padding')"
+        }
+      }
+    }
+  ]
+}
+```
+
+---
+
+```
+$ sls dash deploy
+...
+Serverless:   GET - left-pad -
+  https://yvgrg7f444.execute-api.us-east-1.amazonaws.com/dev/left-pad
+```
+
+---
+
+https://yvgrg7f444.execute-api.us-east-1.amazonaws.com/dev/left-pad?string=test&padding=10
+
+```
+{
+  "paddedString":"      test"
+}
+```
+
+
+<!--
+
 ### `hello-world/handler.js`
 
 ```javascript
@@ -579,67 +719,10 @@ module.exports.handler = function(event, context, cb) {
   ]
 }
 ```
+-->
 
 ---
 
-# :ship: it!
-
----
-
-```
-$ sls dash deploy
-```
-
----
-
-```
- _______                             __
-|   _   .-----.----.--.--.-----.----|  .-----.-----.-----.
-|   |___|  -__|   _|  |  |  -__|   _|  |  -__|__ --|__ --|
-|____   |_____|__|  \___/|_____|__| |__|_____|_____|_____|
-|   |   |             The Serverless Application Framework
-|       |                           serverless.com, v0.5.5
-`-------'
-
-Use the <up>, <down>, <pageup>, <pagedown>, <home>, and <end> keys to navigate.
-Press <enter> to select/deselect, or <space> to select/deselect and move down.
-Press <ctrl> + a to select all, and <ctrl> + d to deselect all.
-Press <ctrl> + f to select all functions, and <ctrl> + e to select all endpoints.
-Press <ctrl> + <enter> to immediately deploy selected.
-Press <escape> to cancel.
-
-
-Serverless: Select the assets you wish to deploy:
-    hello-world
-    *  function - hello-world
-    *  endpoint - hello-world - GET
-    - - - - -
-  > Deploy
-    Cancel
-```
-
----
-
-```
-Serverless: Deploying the specified functions in "dev" to the following regions: us-east-1  
-Serverless: ------------------------  
-Serverless: Successfully deployed the following functions in "dev" to the following regions:   
-Serverless: us-east-1 ------------------------  
-Serverless:   hello-world (going-serverless-demo-hello-world):
-  arn:aws:lambda:us-east-1:852612687751:function:going-serverless-demo-hello-world:dev  
-
-Serverless: Deploying endpoints in "dev" to the following regions: us-east-1  
-Serverless: Successfully deployed endpoints in "dev" to the following regions:  
-Serverless: us-east-1 ------------------------  
-Serverless:   GET - hello-world -
-  https://yvgrg7f444.execute-api.us-east-1.amazonaws.com/dev/hello-world 
-```
-
----
-
-![fit](hello-world.png)
-
----
 
 # Possible Architectures
 
