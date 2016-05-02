@@ -199,7 +199,48 @@ HTTP calls can be mapped to Lambda invocations.
 
 ---
 
-# Serverless
+![fit](lambda-list.png)
+
+---
+
+![fit](lambda-create.png)
+
+<!--
+![fit](lambda-hello.png)
+-->
+
+---
+
+![fit](lambda-hello-create.png)
+
+
+![fit](lambda-hello-create2.png)
+
+---
+
+![fit](lambda-api-endpoint.png)
+
+![fit](lambda-add-event-source.png)
+
+^ AWS IoT
+^ Alexa Skills Kit
+^ Alexa Smart Home
+^ CloudWatch Events - Schedule
+^ CloudWatch Logs
+^ Cognito Sync Trigger
+^ DynamoDB
+
+---
+
+# Coding in the browser?
+
+---
+
+# :unamused: → :fearful: → :rage:
+
+---
+
+# Serverless to the rescue
 
 serverless.com
 
@@ -313,8 +354,7 @@ $ tree
 
 
 
----
-
+<!--
 
 # Lambda
 
@@ -336,42 +376,9 @@ $ tree
 
 ---
 
-
-![fit](lambda-list.png)
-
----
-
-![fit](lambda-create.png)
-
-<!--
-![fit](lambda-hello.png)
 -->
 
----
 
-![fit](lambda-hello-create.png)
-
----
-
-![fit](lambda-hello-create2.png)
-
----
-
-![fit](lambda-api-endpoint.png)
-
----
-
-![fit](lambda-add-event-source.png)
-
-^ AWS IoT
-^ Alexa Skills Kit
-^ Alexa Smart Home
-^ CloudWatch Events - Schedule
-^ CloudWatch Logs
-^ Cognito Sync Trigger
-^ DynamoDB
-
----
 
 <!--
 
@@ -391,25 +398,31 @@ $ tree
 
 
 
-# Coding in the browser?
+---
+
+# What should we build?
 
 ---
 
-# :unamused: → :fearful: → :rage:
+#[fit] Let's build
+
+#[fit] something real*
 
 ---
 
-# Serverless to the rescue
+#[fit] LPaaS
+
+## left-pad as a service*
+
+
+
+\* OK, "real" :smiling_imp:
+
+---
 
 ```
 $ sls function create
-```
-
----
-
-```
-$ sls function create
-Serverless: Enter a new function name to be created in the CWD:  hello-world
+Serverless: Enter a new function name to be created in the CWD:  left-pad
 Serverless: Please, select a runtime for this new Function
   > nodejs4.3
     python2.7
@@ -418,14 +431,14 @@ Serverless: For this new Function, would you like to create an Endpoint, Event, 
   > Create Endpoint
     Create Event
     Just the Function...
-Serverless: Successfully created function: "hello-world"
+Serverless: Successfully created function: "left-pad"
 ```
 
 ---
 
 ```bash
-$ tree hello-world/
-hello-world/
+$ tree left-pad/
+left-pad/
 ├── event.json # sample event for testing function locally
 ├── handler.js # function handler
 └── s-function.json # data for your lambda function, endpoints and event sources
@@ -456,9 +469,9 @@ $ sls dash deploy
 `-------'
 
 Serverless: Select the assets you wish to deploy:
-    hello-world
-    *  function - hello-world
-    *  endpoint - hello-world - GET
+    left-pad
+    *  function - left-pad
+    *  endpoint - left-pad - GET
     - - - - -
   > Deploy
     Cancel
@@ -471,14 +484,14 @@ Serverless: Deploying the specified functions in "dev" to the following regions:
 Serverless: ------------------------  
 Serverless: Successfully deployed the following functions in "dev" to the following regions:   
 Serverless: us-east-1 ------------------------  
-Serverless:   hello-world (going-serverless-demo-hello-world):
-  arn:aws:lambda:us-east-1:852612687751:function:going-serverless-demo-hello-world:dev  
+Serverless:   left-pad (going-serverless-demo-left-pad):
+  arn:aws:lambda:us-east-1:852612687751:function:going-serverless-demo-left-pad:dev  
 
 Serverless: Deploying endpoints in "dev" to the following regions: us-east-1  
 Serverless: Successfully deployed endpoints in "dev" to the following regions:  
 Serverless: us-east-1 ------------------------  
-Serverless:   GET - hello-world -
-  https://yvgrg7f444.execute-api.us-east-1.amazonaws.com/dev/hello-world 
+Serverless:   GET - left-pad -
+  https://yvgrg7f444.execute-api.us-east-1.amazonaws.com/dev/left-pad 
 ```
 
 ---
@@ -489,20 +502,17 @@ Serverless:   GET - hello-world -
 
 ---
 
-# Anatomy of a Lambda Function
-
-![](anatomy2.jpg)
-
----
+# left-pad/handler.js
 
 ```javascript
 'use strict';
-module.exports.handler = (event, context, callback) => {
-    console.log('value1 =', event.key1);
-    console.log('value2 =', event.key2);
-    callback(null, event.key1);  // Echo back the first key value
-    // callback('Something went wrong');
+
+module.exports.handler = function(event, context, cb) {
+  return cb(null, {
+    message: 'Go Serverless! Your Lambda function executed successfully!'
+  });
 };
+
 ```
 
 ^ Your handler can be named whatever you want.
@@ -511,6 +521,12 @@ You configure it during Lambda setup.
 ^ Referenced by filename dot function name.
 
 ^ Maybe index.handler
+
+---
+
+# Anatomy of a Lambda Function
+
+![](anatomy2.jpg)
 
 ---
 
@@ -525,6 +541,8 @@ used to pass data to the function
   key3: 'value3'
 }
 ```
+
+^ Provided by the caller.
 
 ---
 
@@ -544,6 +562,8 @@ provides runtime information
 }
 ```
 
+^ Provided by Amazon Lambda
+
 ---
 
 # `callback`
@@ -559,23 +579,57 @@ callback("some error message");
 callback(null, someData);
 ```
 
----
-
-# Let's build something real
+^ Provided by Amazon Lambda
 
 ---
 
-# LPaaS
+# Lambda Lifecycle
 
-## left-pad as a service*
+# :arrows_counterclockwise:
 
-\* OK, "real" :smiling_imp:
+1. You upload your code
+
+2. Amazon doesn't do anything
 
 ---
+
+# Lambda Cold Start :snowflake:
+
+1. AWS Receives Execution Request
+
+2. Container is provisioned
+
+3. Container is loaded with your code
+
+4. Your code begins execution
+
+5. Your code returns a result
+
+---
+
+# Time Passes
+
+# :clock1:
+
+## (But not too much)
+
+---
+
+# Lambda Container Reuse :recycle:
+
+1. AWS Receives Execution Request
+
+2. Your code begins execution
+
+3. Your code returns a result
+
+
+---
+
+
+
 
 ```
-$ sls function create left-pad
-...
 $ cd left-pad
 
 $ npm init
@@ -644,10 +698,56 @@ https://yvgrg7f444.execute-api.us-east-1.amazonaws.com/dev/left-pad?string=test&
 }
 ```
 
+---
+
+# Testing
+
+$ npm install -g mocha
+
+$ npm install --save-dev chai
+
+---
+
+## left-pad/handler_test.js
+
+```javascript
+var expect = require("chai").expect;
+var handler = require("./handler.js");
+
+describe('handler', function(){
+
+  it('returns the right thing', function(){
+    var event = {
+      string: 'test',
+      padding: 10
+    };
+    var context = {};
+    var cb = function(error, response){
+      expect(error).to.be.null;
+      expect(response.paddedString).to.equal("      test");
+    };
+    handler.handler(event, context, cb);
+  });
+
+});
+```
+
+---
+
+```
+$ mocha handler_test.js 
+
+
+  handler
+    ✓ returns the right thing
+
+
+  1 passing (9ms)
+```
 
 <!--
 
-### `hello-world/handler.js`
+### `left-pad/handler.js`
 
 ```javascript
 'use strict';
@@ -661,11 +761,11 @@ module.exports.handler = function(event, context, cb) {
 
 ---
 
-### `hello-world/s-function.json`
+### `left-pad/s-function.json`
 
 ```javascript
 {
-  "name": "hello-world",
+  "name": "left-pad",
   "runtime": "nodejs4.3",
   "description": "Serverless Lambda function for project: going-serverless-demo",
   "customName": false,
@@ -692,13 +792,13 @@ module.exports.handler = function(event, context, cb) {
 ```
 
 ---
-### `hello-world/s-function.json`
+### `left-pad/s-function.json`
 
 ```javascript
 {
   "endpoints": [
     {
-      "path": "hello-world",
+      "path": "left-pad",
       "method": "GET",
       "type": "AWS",
       "authorizationType": "none",
@@ -724,56 +824,8 @@ module.exports.handler = function(event, context, cb) {
 ---
 
 
-# Possible Architectures
-
-* Monolithic
-* Microservices
-* Nanoservices
-
----
-
-# Lambda Lifecycle
-
-# :arrows_counterclockwise:
-
-1. You upload your code
-
-2. Amazon doesn't do anything
-
----
-
-# Lambda Cold Start :snowflake:
-
-1. AWS Receives Execution Request
-
-2. Container is provisioned
-
-3. Container is loaded with your code
-
-4. Your code begins execution
-
-5. Your code returns a result
-
----
-
-# Time Passes
-
-# :clock1:
-
-## (But not too much)
-
----
-
-# Lambda Container Reuse :recycle:
-
-1. AWS Receives Execution Request
-
-2. Your code begins execution
-
-3. Your code returns a result
 
 
----
 
 <!--
 
@@ -966,7 +1018,13 @@ Used to describe and document RESTful APIs
 
 -->
 
+# Possible Architectures
 
+* Monolithic
+* Microservices
+* Nanoservices
+
+---
 
 
 ## Monolithic Architecture
@@ -983,6 +1041,8 @@ endpoints map to one Lambda
 * Any interaction with the
 system keeps Lambda alive
 -->
+
+<!--
 
 ---
 
@@ -1016,6 +1076,8 @@ POST /posts
   └── MyGiantLambda.postsCreate
 ```
 
+-->
+
 <!--
 /users[/*]
   └── MyGiantLambda.Users.[index|show|create|update|delete]
@@ -1042,6 +1104,9 @@ to multiple Lambdas
 * Any interaction with a concern
 keeps that concern alive
 -->
+
+
+<!--
 
 ---
 
@@ -1073,6 +1138,8 @@ POST /users
 POST /posts
   └── PostLambda.create
 ```
+-->
+
 <!--
 /users[/*]
   └── UserLambda.[index|show|create|update|delete]
@@ -1100,6 +1167,7 @@ API Gateway & Lambda
 * Each function has a separate lifecycle
 -->
 
+<!--
 ---
 
 # Nanoservices Lambda
@@ -1132,6 +1200,7 @@ POST /users
 POST /posts
   └── PostCreateLambda.handler
 ```
+-->
 
 ---
 
