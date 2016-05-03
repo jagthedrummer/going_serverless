@@ -1,6 +1,6 @@
 build-lists: true
 autoscale: true
-footer: *@jagthedrummer - OctoLabs.com*
+footer: *@jagthedrummer - OctoLabs.com/railsconf2016*
 slidenumbers: false
 
 # Going Serverless
@@ -257,11 +257,11 @@ docs.serverless.com
 
 ---
 
-## First step
+# First step
 
 * # Create a new AWS account!
 
-* ## Srsly!
+* #[fit] Srsly!
 
 ^ Serverless getting started instructions start with
 very permissive permissions.
@@ -502,6 +502,14 @@ Serverless:   GET - left-pad -
 
 ---
 
+
+
+# Anatomy of a Lambda Function
+
+![](anatomy2.jpg)
+
+---
+
 # left-pad/handler.js
 
 ```javascript
@@ -524,21 +532,15 @@ You configure it during Lambda setup.
 
 ---
 
-# Anatomy of a Lambda Function
-
-![](anatomy2.jpg)
-
----
 
 # `event`
 
 used to pass data to the function
 
-```json
+```javascript
 {
-  key1: 'value1',
-  key2: 'value2',
-  key3: 'value3'
+  string: 'test',
+  padding: 10
 }
 ```
 
@@ -583,51 +585,6 @@ callback(null, someData);
 
 ---
 
-# Lambda Lifecycle
-
-# :arrows_counterclockwise:
-
-1. You upload your code
-
-2. Amazon doesn't do anything
-
----
-
-# Lambda Cold Start :snowflake:
-
-1. AWS Receives Execution Request
-
-2. Container is provisioned
-
-3. Container is loaded with your code
-
-4. Your code begins execution
-
-5. Your code returns a result
-
----
-
-# Time Passes
-
-# :clock1:
-
-## (But not too much)
-
----
-
-# Lambda Container Reuse :recycle:
-
-1. AWS Receives Execution Request
-
-2. Your code begins execution
-
-3. Your code returns a result
-
-
----
-
-
-
 
 ```
 $ cd left-pad
@@ -642,8 +599,6 @@ $ npm install left-pad --save
 # left-pad/handler.js
 
 ```javascript
-'use strict';
-
 let leftpad = require('left-pad');
 
 module.exports.handler = function(event, context, cb) {
@@ -734,7 +689,7 @@ describe('handler', function(){
 
 ---
 
-```
+```bash
 $ mocha handler_test.js 
 
 
@@ -744,6 +699,140 @@ $ mocha handler_test.js
 
   1 passing (9ms)
 ```
+
+---
+
+# What about
+#[fit] Ruby?
+
+---
+
+```
+mruby-hello-world$ tree .
+.
+├── event.json
+├── handler.js
+├── handler.rb
+├── mruby
+└── s-function.json
+
+0 directories, 5 files
+```
+
+---
+
+# mruby-hello-world/handler.js
+
+```javascript
+var spawn = require('child_process').spawn;
+
+module.exports.handler = function(event, context, callback) {
+  var child = spawn('./mruby', ['handler.rb', JSON.stringify(event, null, 2)]);
+  var rubyOutput = [];
+  child.stdout.on('data', function (data) { rubyOutput.push(data.toString()); });
+  child.stderr.on('data', function (data) { rubyOutput.push(data.toString()); });
+  child.on('close', function (code) {
+    callback(null,{
+      message: "We're back from ruby land",
+      rubyOutput: rubyOutput
+    });
+  });
+}
+
+```
+
+---
+
+# mruby-hello-world/handler.rb
+
+```ruby
+puts 'Hello, Lambda from Ruby!'
+puts ARGV
+```
+
+---
+
+https://yvgrg7f444.execute-api.us-east-1.amazonaws.com/dev/mruby-hello-world
+
+```javascript
+{
+  "message":"We're back from ruby land",
+  "rubyOutput":["Hello, Lambda from Ruby!\n[\"{}\"]\n"]
+}
+```
+
+---
+
+
+## Hello World Timing Comparison
+
+## Cold Start
+
+* Node    367ms
+* Ruby  1,786ms
+
+---
+
+## Hello World Timing Comparison
+
+## Warm Run - No API Gateway
+
+* Node  ~0.5ms
+* Ruby  ~5.0ms
+
+---
+
+## Hello World Timing Comparison
+
+## Warm Run
+
+* Node  ~ 80ms - 240ms
+* Ruby  ~ 260ms - 580ms
+
+---
+
+# Lambda Lifecycle
+
+# :arrows_counterclockwise:
+
+1. You upload your code
+
+2. Amazon doesn't do anything
+
+---
+
+# Lambda Cold Start :snowflake:
+
+1. AWS Receives Execution Request
+
+2. Container is provisioned
+
+3. Container is loaded with your code
+
+4. Your code begins execution
+
+5. Your code returns a result
+
+---
+
+# Time Passes
+
+# :clock1:
+
+## (But not too much)
+
+---
+
+# Lambda Container Reuse :recycle:
+
+1. AWS Receives Execution Request
+
+2. Your code begins execution
+
+3. Your code returns a result
+
+
+
 
 <!--
 
