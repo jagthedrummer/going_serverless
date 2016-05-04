@@ -116,20 +116,23 @@ deploying code to AWS can be very inexpensive.
 Consultant, Author, SaaSer
 
 ![inline 100%](octologo.png)
-
 @jagthedrummer
 jeremy@octolabs.com
 
 ---
 
-IndependentConsultingManual.com
+# IndependentConsultingManual.com
 
-Remarq.io
+# Remarq.io
 
-CloudHdr.com
+<!--
+##[fit] CloudHdr.com
+-->
 
+<!--
 Things I Enjoy:
 Dopamine, Serotonin
+-->
 
 Other Interests:
 Drumming, Photography, and Brewing
@@ -236,7 +239,7 @@ HTTP calls can be mapped to Lambda invocations.
 
 ---
 
-# :unamused: → :fearful: → :rage:
+# :unamused: → :worried: → :rage:
 
 ---
 
@@ -491,7 +494,7 @@ Serverless: Deploying endpoints in "dev" to the following regions: us-east-1
 Serverless: Successfully deployed endpoints in "dev" to the following regions:  
 Serverless: us-east-1 ------------------------  
 Serverless:   GET - left-pad -
-  https://yvgrg7f444.execute-api.us-east-1.amazonaws.com/dev/left-pad 
+  http://serverless.octolabs.com/left-pad 
 ```
 
 ---
@@ -640,12 +643,12 @@ module.exports.handler = function(event, context, cb) {
 $ sls dash deploy
 ...
 Serverless:   GET - left-pad -
-  https://yvgrg7f444.execute-api.us-east-1.amazonaws.com/dev/left-pad
+  http://serverless.octolabs.com/left-pad
 ```
 
 ---
 
-https://yvgrg7f444.execute-api.us-east-1.amazonaws.com/dev/left-pad?string=test&padding=10
+http://serverless.octolabs.com/left-pad?string=test&padding=10
 
 ```
 {
@@ -707,13 +710,13 @@ $ mocha handler_test.js
 
 ---
 
-```
+```bash
 mruby-hello-world$ tree .
 .
 ├── event.json
 ├── handler.js
-├── handler.rb
-├── mruby
+├── handler.rb         # A ruby script! :D
+├── mruby              # The mruby executable
 └── s-function.json
 
 0 directories, 5 files
@@ -752,7 +755,7 @@ puts ARGV
 
 ---
 
-https://yvgrg7f444.execute-api.us-east-1.amazonaws.com/dev/mruby-hello-world
+http://serverless.octolabs.com/mruby-hello-world
 
 ```javascript
 {
@@ -761,33 +764,7 @@ https://yvgrg7f444.execute-api.us-east-1.amazonaws.com/dev/mruby-hello-world
 }
 ```
 
----
 
-
-## Hello World Timing Comparison
-
-## Cold Start
-
-* Node    367ms
-* Ruby  1,786ms
-
----
-
-## Hello World Timing Comparison
-
-## Warm Run - No API Gateway
-
-* Node  ~0.5ms
-* Ruby  ~5.0ms
-
----
-
-## Hello World Timing Comparison
-
-## Warm Run
-
-* Node  ~ 80ms - 240ms
-* Ruby  ~ 260ms - 580ms
 
 ---
 
@@ -832,7 +809,23 @@ https://yvgrg7f444.execute-api.us-east-1.amazonaws.com/dev/mruby-hello-world
 3. Your code returns a result
 
 
+---
 
+# Lambda timing comparison
+
+![inline](lambda_timing.png)
+
+---
+
+# Remote API call timing comparison
+
+![inline](runscope_timing2.png)
+
+---
+
+# API Gateway Latency
+
+![inline](api_latency.png)
 
 <!--
 
@@ -1315,6 +1308,6 @@ POST /posts
  
 # Thank you!
 
-octolabs.com/goingserverless-okcjs
+octolabs.com/railsconf2016
 
 ![original](we-did-it.jpg)
