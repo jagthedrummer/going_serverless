@@ -768,48 +768,6 @@ http://serverless.octolabs.com/mruby-hello-world
 
 ---
 
-# Lambda Lifecycle
-
-# :arrows_counterclockwise:
-
-1. You upload your code
-
-2. Amazon doesn't do anything
-
----
-
-# Lambda Cold Start :snowflake:
-
-1. AWS Receives Execution Request
-
-2. Container is provisioned
-
-3. Container is loaded with your code
-
-4. Your code begins execution
-
-5. Your code returns a result
-
----
-
-# Time Passes
-
-# :clock1:
-
-## (But not too much)
-
----
-
-# Lambda Container Reuse :recycle:
-
-1. AWS Receives Execution Request
-
-2. Your code begins execution
-
-3. Your code returns a result
-
-
----
 
 # Lambda timing comparison
 
@@ -908,86 +866,6 @@ module.exports.handler = function(event, context, cb) {
 
 
 
-
-<!--
-
-## Lambda Pricing :moneybag:
-
-Charged by:
-
-* \# of requests
-
-* length of execution
-
----
-
-## Lambda Request Pricing
-
-First 1 million requests per month are free
-
-$0.20 per 1 million requests thereafter<br/>($0.0000002 per request)
-
----
-
-## Lambda Execution Pricing
-
-First 400,000 GB-seconds per month are free
-
-$0.00001667 for per GB-second thereafter
-
----
-
-GB-second 
-
- =
-
-LambdaMemoryInGigabytes * ExecutionTime
-
-<hr/>
-
-1GB * 1sec = 1 GB-sec
-0.5GB * 2sec = 1 GB-sec
-0.1GB * 0.5sec * 20executions = 1 GB-sec
-
----
-
-## Lambda Pricing Example
-
-3 million executions per month
-
-512MB of memory
-
-1 second execution time
-
-$18.74 per month
-
----
-
-## Lambda Pricing Example
-
-3 million executions per month
-
-512MB of memory
-
-**0.5 second execution time**
-
-$6.24 per month
-
----
-
-## Lambda Pricing Example
-
-3 million executions per month
-
-512MB of memory
-
-**0.2 second execution time**
-
-$0.40 per month
-
----
-
--->
 
 
 <!--
@@ -1099,6 +977,162 @@ Used to describe and document RESTful APIs
 ---
 
 -->
+
+
+
+# Wrapping Up
+
+---
+
+## AWS Provides the Building Blocks
+
+---
+
+## Serverless Provides Structure and Process
+
+---
+
+## You provide the
+
+![inline](magic.gif)
+
+---
+
+.
+ 
+# Thank you!
+
+octolabs.com/railsconf2016
+
+![original](we-did-it.jpg)
+
+---
+
+# Bonus Slides
+
+---
+
+## Lambda Pricing :moneybag:
+
+Charged by:
+
+* \# of requests
+
+* length of execution
+
+---
+
+## Lambda Request Pricing
+
+First 1 million requests per month are free
+
+$0.20 per 1 million requests thereafter<br/>($0.0000002 per request)
+
+---
+
+## Lambda Execution Pricing
+
+First 400,000 GB-seconds per month are free
+
+$0.00001667 for per GB-second thereafter
+
+---
+
+GB-second 
+
+ =
+
+LambdaMemoryInGigabytes * ExecutionTime
+
+<hr/>
+
+1GB * 1sec = 1 GB-sec
+0.5GB * 2sec = 1 GB-sec
+0.5GB * 0.5sec * 4executions = 1 GB-sec
+
+---
+
+## Lambda Pricing Example
+
+3 million executions per month
+
+512MB of memory
+
+1 second execution time
+
+$18.74 per month
+
+---
+
+## Lambda Pricing Example
+
+3 million executions per month
+
+512MB of memory
+
+**0.5 second execution time**
+
+$6.24 per month
+
+---
+
+## Lambda Pricing Example
+
+3 million executions per month
+
+512MB of memory
+
+**0.2 second execution time**
+
+$0.40 per month
+
+---
+
+# Lambda Lifecycle
+
+# :arrows_counterclockwise:
+
+1. You upload your code
+
+2. Amazon doesn't do anything
+
+---
+
+# Lambda Cold Start :snowflake:
+
+1. AWS Receives Execution Request
+
+2. Container is provisioned
+
+3. Container is loaded with your code
+
+4. Your code begins execution
+
+5. Your code returns a result
+
+---
+
+# Time Passes
+
+# :clock1:
+
+## (But not too much)
+
+---
+
+# Lambda Container Reuse :recycle:
+
+1. AWS Receives Execution Request
+
+2. Your code begins execution
+
+3. Your code returns a result
+
+
+---
+
+
+
 
 # Possible Architectures
 
@@ -1284,30 +1318,3 @@ POST /posts
 ```
 -->
 
----
-
-# Wrapping Up
-
----
-
-## AWS Provides the Building Blocks
-
----
-
-## Serverless Provides Structure and Process
-
----
-
-## You provide the
-
-![inline](magic.gif)
-
----
-
-.
- 
-# Thank you!
-
-octolabs.com/railsconf2016
-
-![original](we-did-it.jpg)
