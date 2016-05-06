@@ -11,6 +11,8 @@ slidenumbers: false
 
 # :thought_balloon:
 
+# :neutral_face:
+
 ---
 
 # Serverless?
@@ -46,6 +48,8 @@ AWS Lambda, API Gateway, and related services
 ---
 
 # :thought_balloon:
+
+# :neutral_face:
 
 ---
 
@@ -129,10 +133,8 @@ jeremy@octolabs.com
 ##[fit] CloudHdr.com
 -->
 
-<!--
 Things I Enjoy:
 Dopamine, Serotonin
--->
 
 Other Interests:
 Drumming, Photography, and Brewing
@@ -424,18 +426,29 @@ $ tree
 ---
 
 ```
-$ sls function create
-Serverless: Enter a new function name to be created in the CWD:  left-pad
+$ sls function create left-pad
+```
+
+---
+
+```
 Serverless: Please, select a runtime for this new Function
   > nodejs4.3
     python2.7
     nodejs (v0.10, soon to be deprecated)
-Serverless: For this new Function, would you like to create an Endpoint, Event, or just the Function?
+```
+
+---
+
+```
+Serverless: For this new Function, would you like to create an
+Endpoint, Event, or just the Function?
   > Create Endpoint
     Create Event
     Just the Function...
 Serverless: Successfully created function: "left-pad"
 ```
+
 
 ---
 
@@ -561,7 +574,6 @@ provides runtime information
   functionName:             'handler',
   functionVersion:          'xyz',
   awsRequestId:             '12345',
-  logGroupName:             'abcde',
   identity:                 {...},
   clientContext:            {...}
 }
@@ -605,12 +617,108 @@ $ npm install left-pad --save
 let leftpad = require('left-pad');
 
 module.exports.handler = function(event, context, cb) {
+
+
+
+
+
+};
+```
+
+---
+
+# left-pad/handler.js
+
+```javascript
+let leftpad = require('left-pad');
+
+module.exports.handler = function(event, context, cb) {
+  var string = event.string || "",
+      padding = event.padding || 0,
+
+
+
+};
+```
+
+---
+
+# left-pad/handler.js
+
+```javascript
+let leftpad = require('left-pad');
+
+module.exports.handler = function(event, context, cb) {
+  var string = event.string || "",
+      padding = event.padding || 0,
+      paddedString = leftpad(string,padding),
+      payload = { paddedString };
+ 
+};
+```
+
+---
+
+# left-pad/handler.js
+
+```javascript
+let leftpad = require('left-pad');
+
+module.exports.handler = function(event, context, cb) {
   var string = event.string || "",
       padding = event.padding || 0,
       paddedString = leftpad(string,padding),
       payload = { paddedString };
   return cb(null, payload);
 };
+```
+
+---
+
+# left-pad/s-function.json (simplified)
+
+```javascript
+{
+  "runtime": "nodejs4.3",
+  "handler": "handler.handler",
+  "memorySize": 1024
+  "endpoints": [
+
+
+
+
+
+
+
+
+
+
+  ]
+}
+```
+
+---
+
+# left-pad/s-function.json (simplified)
+
+```javascript
+{
+  "runtime": "nodejs4.3",
+  "handler": "handler.handler",
+  "memorySize": 1024
+  "endpoints": [
+    {
+      "path": "left-pad",
+      "method": "GET",
+      "requestTemplates": {
+        "application/json": {
+
+
+        }
+      }
+    }
+  ]
+}
 ```
 
 ---
@@ -673,7 +781,102 @@ var expect = require("chai").expect;
 var handler = require("./handler.js");
 
 describe('handler', function(){
+  it('returns the right thing', function(){
 
+
+
+
+
+
+
+
+
+
+  });
+});
+```
+
+---
+
+## left-pad/handler_test.js
+
+```javascript
+var expect = require("chai").expect;
+var handler = require("./handler.js");
+
+describe('handler', function(){
+  it('returns the right thing', function(){
+    var event = {
+      string: 'test',
+      padding: 10
+    };
+
+
+
+
+
+
+  });
+});
+```
+
+---
+
+## left-pad/handler_test.js
+
+```javascript
+var expect = require("chai").expect;
+var handler = require("./handler.js");
+
+describe('handler', function(){
+  it('returns the right thing', function(){
+    var event = {
+      string: 'test',
+      padding: 10
+    };
+    var context = {};
+
+
+
+
+
+  });
+});
+```
+
+---
+
+## left-pad/handler_test.js
+
+```javascript
+var expect = require("chai").expect;
+var handler = require("./handler.js");
+
+describe('handler', function(){
+  it('returns the right thing', function(){
+    var event = {
+      string: 'test',
+      padding: 10
+    };
+    var context = {};
+    var cb = function(error, response){
+      expect(error).to.be.null;
+      expect(response.paddedString).to.equal("      test");
+    };
+
+  });
+});
+```
+
+---
+
+## left-pad/handler_test.js
+
+```javascript
+var expect = require("chai").expect;
+var handler = require("./handler.js");
+
+describe('handler', function(){
   it('returns the right thing', function(){
     var event = {
       string: 'test',
@@ -686,7 +889,6 @@ describe('handler', function(){
     };
     handler.handler(event, context, cb);
   });
-
 });
 ```
 
@@ -764,14 +966,11 @@ http://serverless.octolabs.com/mruby-hello-world
 }
 ```
 
-
-
 ---
 
+# API Gateway Latency
 
-# Lambda timing comparison
-
-![inline](lambda_timing.png)
+![inline](api_latency.png)
 
 ---
 
@@ -781,9 +980,14 @@ http://serverless.octolabs.com/mruby-hello-world
 
 ---
 
-# API Gateway Latency
 
-![inline](api_latency.png)
+# Lambda timing comparison
+
+![inline](lambda_timing.png)
+
+
+
+
 
 <!--
 
@@ -1001,6 +1205,8 @@ Used to describe and document RESTful APIs
 .
  
 # Thank you!
+
+## (And thanks to Click Funnels)
 
 octolabs.com/railsconf2016
 
