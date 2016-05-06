@@ -51,6 +51,8 @@ AWS Lambda, API Gateway, and related services
 
 # :neutral_face:
 
+^ I bet a few of you noticed the word "exclusively" on the previous slide and are now thinking something else.
+
 ---
 
 ## Vendor Lock-in :fearful:
@@ -66,11 +68,9 @@ Why would you do this?
 
 ![](ops.jpg)
 
-^ Relying on Amazon for Ops. They're better at it than you'll ever be.
-If you disagree you should apply for an ops job at Amazon.
+^ Relying on Amazon for Ops. They're better at it than you'll ever be. If you disagree you should talk to me and we'll put together a nice fat consulting proposal to take to Amazon.
 
-^ Especially true if you're an application developer and not an ops
-specialist.
+^ Especially true if you're an application developer and not an ops specialist.
 
 ---
 
@@ -133,15 +133,25 @@ jeremy@octolabs.com
 ##[fit] CloudHdr.com
 -->
 
+` `
+
+<!--
 Things I Enjoy:
 Dopamine, Serotonin
+-->
+
+` `
+
+` `
 
 Other Interests:
 Drumming, Photography, and Brewing
 
 ---
 
-![fit](clickfunnels_logo.png)
+![inline fit](clickfunnels_logo.png)
+
+clickfunnels.com
 
 ^ Thanks to click funnels for supporting this talk and
 allowing me to talk about what we've been doing.
@@ -163,8 +173,11 @@ allowing me to talk about what we've been doing.
 
 ![](lambda.png)
 
-^ Heroku for single functions
-Raw compute power.
+^ Heroku for single functions. Raw compute power.
+
+^ Ruby is not supported directly.
+
+^ Appologies to @searls and @tenderlove for talking about Node.js
 
 ---
 
@@ -243,6 +256,8 @@ HTTP calls can be mapped to Lambda invocations.
 
 # :unamused: → :worried: → :rage:
 
+^ unamused => worried => angry
+
 ---
 
 # Serverless to the rescue
@@ -303,7 +318,19 @@ $ sls project create
 ```
 Serverless: Initializing Serverless Project...  
 Serverless: Enter a name for this project:  (serverless-bkqhpg) going-serverless-demo
+```
+
+---
+
+```
+
 Serverless: Enter a new stage name for this project:  (dev) 
+
+```
+
+---
+
+```
 Serverless: For the "dev" stage, do you want to use an existing Amazon Web Services
             profile or create a new one?
   > Existing Profile
@@ -311,6 +338,11 @@ Serverless: For the "dev" stage, do you want to use an existing Amazon Web Servi
 Serverless: Select a profile for your project: 
   > lambdatest
 Serverless: Creating stage "dev"...  
+```
+
+---
+
+```
 Serverless: Select a new region for your stage: 
   > us-east-1
     us-west-2
@@ -318,14 +350,14 @@ Serverless: Select a new region for your stage:
     eu-central-1
     ap-northeast-1
 Serverless: Creating region "us-east-1" in stage "dev"...  
-Serverless: Deploying resources to stage "dev" in region "us-east-1" via Cloudformation
-            (~3 minutes)...  
-Serverless: /
+
 ```
 
 ---
 
 ```
+Serverless: Deploying resources to stage "dev" in region "us-east-1" via Cloudformation
+            (~3 minutes)...
 Serverless: Successfully deployed "dev" resources to "us-east-1"  
 Serverless: Successfully created region "us-east-1" within stage "dev"  
 Serverless: Successfully created stage "dev"  
@@ -465,6 +497,10 @@ left-pad/
 ---
 
 # :ship: it!
+
+^ Since you can't run Lambda locally, part of the development workflow is to ship code to the 'dev' stage on Amazon.
+
+^ Development requires and internet connection, but you need that for StackOverflow anyway.
 
 ---
 
@@ -924,6 +960,52 @@ mruby-hello-world$ tree .
 0 directories, 5 files
 ```
 
+^ Thanks to qrush for exploring this and posting his proof of concept
+
+---
+
+# mruby-hello-world/handler.js
+
+```javascript
+var spawn = require('child_process').spawn;
+
+module.exports.handler = function(event, context, callback) {
+  var child = spawn('./mruby', ['handler.rb', JSON.stringify(event, null, 2)]);
+
+
+
+
+
+
+
+
+
+}
+
+```
+
+---
+
+# mruby-hello-world/handler.js
+
+```javascript
+var spawn = require('child_process').spawn;
+
+module.exports.handler = function(event, context, callback) {
+  var child = spawn('./mruby', ['handler.rb', JSON.stringify(event, null, 2)]);
+  var rubyOutput = [];
+  child.stdout.on('data', function (data) { rubyOutput.push(data.toString()); });
+  child.stderr.on('data', function (data) { rubyOutput.push(data.toString()); });
+
+
+
+
+
+
+}
+
+```
+
 ---
 
 # mruby-hello-world/handler.js
@@ -946,6 +1028,7 @@ module.exports.handler = function(event, context, callback) {
 
 ```
 
+
 ---
 
 # mruby-hello-world/handler.rb
@@ -965,6 +1048,14 @@ http://serverless.octolabs.com/mruby-hello-world
   "rubyOutput":["Hello, Lambda from Ruby!\n[\"{}\"]\n"]
 }
 ```
+
+---
+
+# This is not production ready!
+
+---
+
+# How fast is all of this?
 
 ---
 
