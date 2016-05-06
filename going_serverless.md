@@ -1202,11 +1202,11 @@ Used to describe and document RESTful APIs
 
 ---
 
-.
+` `
  
 # Thank you!
 
-## (And thanks to Click Funnels)
+### (And thanks to Click Funnels)
 
 octolabs.com/railsconf2016
 
